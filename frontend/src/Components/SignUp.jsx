@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+
+
 const SignUp = () => {
+  const featchData = async () => { 
+
+    const  response = await fetch("http://localhost:5000/" );
+
+    const data= await response.json();
+    console.log(data);
+    
+  };
+
+  useEffect(() => {
+    featchData();
+  }, []);
+
   return (
     <div
       className="bg-cover bg-no-repeat w-full flex justify-center items-center flex-1 h-svh fixed "
