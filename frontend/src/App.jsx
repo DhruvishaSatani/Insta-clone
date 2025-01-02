@@ -4,8 +4,10 @@ import { BrowserRouter,Routes,Route } from "react-router-dom";
 import SignUp from "./Components/SignUp";
 import SignIn from "./Components/SignIn";
 import Home from "./Components/Home";
+import Profile from './Components/profile'
 import { ToastContainer} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import CreatPost from "./Components/CreatPost";
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/createpost" element={<CreatPost />} />
         </Routes>
         <ToastContainer theme="dark" position="top-center" />
       </div>
