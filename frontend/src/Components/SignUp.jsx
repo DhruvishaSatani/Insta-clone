@@ -1,20 +1,56 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { Link ,useNavigate} from "react-router-dom";
+import { toast} from 'react-toastify';
 
 const SignUp = () => {
-  const featchData = async () => { 
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const  response = await fetch("http://localhost:5000/" );
 
-    const data= await response.json();
-    console.log(data);
+    // Toast functions
+    const notifyA = (msg) => toast.error(msg)
+    const notifyB = (msg) => toast.success(msg)
+  
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
+  
+  
+  const postData = (e) => {
+
+    if (!emailRegex.test(email)) {
+      notifyA("Invalid email")
+      return
+    } else if (!passRegex.test(password)) {
+      notifyA("Password must contain at least 8 characters, including at least 1 number and 1 includes both lower and uppercase letters and special characters for example #,?,!")
+      return
+    }
     
-  };
+    fetch("http://localhost:5000/signup", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: name,
+        username: username,
+        email: email,
+        password: password
 
-  useEffect(() => {
-    featchData();
-  }, []);
+      })
+    }).then(res => res.json())
+     .then (data => {
+      if (data.error) {
+        notifyA(data.error)
+      } else {
+        notifyB(data.message)
+        navigate("/signin")
+      }
+      console.log(data);
+     })
+  };
 
   return (
     <div
@@ -32,42 +68,84 @@ const SignUp = () => {
             className="w-52"
           />
           <p className="w-full text-center">
-            Sign up to see photos and videos  from your friends
+            Sign up to see photos and videos from your friends
           </p>
 
           <div className="w-full">
-            <input type="email" placeholder="email@gmail.com" name="email" className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none" />
+            <input
+              type="email"
+              value={email}
+              id="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              placeholder="email@gmail.com"
+              name="email"
+              className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none"
+            />
           </div>
-          <div className="w-full">   
-            <input type="text" placeholder="Full Name" name="name" className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none" />
+          <div className="w-full">
+            <input
+              type="text"
+              value={name}
+              id="name"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              placeholder="Full Name"
+              name="name"
+              className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none"
+            />
           </div>
 
           <div className="w-full">
-            <input type="text" placeholder="user Name" name="username" className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none" />
+            <input
+              type="text"
+              value={username}
+              id="username"
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+              placeholder="user Name"
+              name="username"
+              className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none"
+            />
           </div>
 
           <div className="w-full">
-            <input type="password" placeholder="Password" name="password" className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none" />
+            <input
+              type="password"
+              value={password}
+              id="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              placeholder="Password"
+              name="password"
+              className="border border-gray-400 p-[5px] placeholder:text-gray-300  rounded-lg w-full outline-none"
+            />
           </div>
-          <p
-            className="w-full text-[14px] m-[3px]  text-center"
-            
-          >
-            By signing up, you agree to out Terms,  privacy policy and
-            cookies policy.
+          <p className="w-full text-[14px] m-[3px]  text-center">
+            By signing up, you agree to out Terms, privacy policy and cookies
+            policy.
           </p>
 
-          <input type="submit" id="submit-btn" value="Sign Up" className="bg-blue-500 p-[6px] placeholder:text-gray-300  rounded-lg w-full outline-none cursor-pointer  text-white font-semibold text-lg "  />
+          <input
+            type="submit"
+            id="submit-btn"
+            onClick={()=>{postData()}}
+            value="Sign Up"
+            className="bg-blue-500 p-[6px] placeholder:text-gray-300  rounded-lg w-full outline-none cursor-pointer  text-white font-semibold text-lg "
+          />
 
           <hr className="w-full border border-gray-300" />
-          
-          <div className="mt-3">
-          Already have an account ?
-          <Link to="/signin">
-            <span style={{ color: "blue", cursor: "pointer" }}>Sign In</span>
-          </Link>
-        </div>
 
+          <div className="mt-3">
+            Already have an account ?
+            <Link to="/signin">
+              <span style={{ color: "blue", cursor: "pointer" }}>Sign In</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

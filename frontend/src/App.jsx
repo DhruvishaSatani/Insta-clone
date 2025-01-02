@@ -3,8 +3,9 @@ import Navbar from "./Components/Navbar";
 import { BrowserRouter,Routes,Route } from "react-router-dom";
 import SignUp from "./Components/SignUp";
 import SignIn from "./Components/SignIn";
-import Profile from "./Components/Profile";
 import Home from "./Components/Home";
+import { ToastContainer} from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
@@ -16,8 +17,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/profile" element={<Profile />} />
         </Routes>
+        <ToastContainer theme="dark" position="top-center" />
       </div>
     </BrowserRouter>
   );
