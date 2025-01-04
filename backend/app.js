@@ -3,15 +3,17 @@ const app = express();
 const data = require('./data.js');
 const cors= require('cors');
 const mongoose = require('mongoose');
-const mongoUrl = require('./keys.js');
+const {mongoUrl} = require('./keys.js');
 PORT = 5000;
 
 
 
 app.use(cors());
 require("./models/model.js");
+require("./models/post.js");
 app.use(express.json());
 app.use(require ('./Routes/auth.js'));
+app.use(require ('./Routes/CreatePost.js'));
 mongoose.connect(mongoUrl);
 
 mongoose.connection.on('connected', () => { 

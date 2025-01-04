@@ -3,7 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const USER = mongoose.model("USER");
 const bcrypt = require('bcrypt');
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const {jwt_secret} = require('../keys.js');
 
 router.get('/', (req, res) => {
     res.send("Hello World");
@@ -44,6 +45,15 @@ router.post('/signup', (req, res) => {
    
 });
 
+// router.get('/createpost', (req, res) => {  
+    
+//     console.log("hello createpost auth"); 
+    
+    
+
+// });
+
+
 router.post('/signin', (req, res) => {
     const{email,password} = req.body;
     if (!email || !password) {
@@ -56,9 +66,15 @@ router.post('/signin', (req, res) => {
         }
         console.log(savedUser);
         
-        bcrypt.compare(password, savedUser.password).then((doMatch) => {
-            if (doMatch) {
-                res.json({message: "Successfully signed in"})
+        bcrypt.compare(password, savedUser.password).then((match) => {
+            if (match) {
+                // res.json({message: "Successfully signed in"})
+                const token = jwt.sign({ _id: savedUser.id }, Jwt_secret);
+                const { _id, name, email, userName } = savedUser
+
+                res.json({ token, user: { _id, name, email, userName } })
+
+                console.log({ token, user: { _id, name, email, userName } })
             } else {
                 return res.status(422).json({ error: "Invalid Email or Password" })
             }
