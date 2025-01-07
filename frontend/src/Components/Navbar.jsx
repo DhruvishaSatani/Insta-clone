@@ -2,6 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
+  const loginStatus =()=>{
+        const token =localStorage.getItem("jwt");
+        console.log(token);
+        
+  };
+  loginStatus();
   return (
     <div className='flex justify-around items-center  bg-gray-200 h-20 shadow-xl'>
           <div>

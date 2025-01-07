@@ -5,6 +5,7 @@ const USER = mongoose.model("USER");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const {jwt_secret} = require('../keys.js');
+// const requireLogin = require("../middlewares/requireLogin");
 
 router.get('/', (req, res) => {
     res.send("Hello World");
@@ -34,7 +35,7 @@ router.post('/signup', (req, res) => {
             });
             user.save()
             .then(user => {
-                res.json({message: "Successfully posted"})})
+                res.json({message: "Successfully signed up"})})
             .catch(err =>{console.log(err);
             } )
         })
@@ -45,43 +46,50 @@ router.post('/signup', (req, res) => {
    
 });
 
-// router.get('/createpost', (req, res) => {  
-    
-//     console.log("hello createpost auth"); 
-    
-    
 
-// });
+
 
 
 router.post('/signin', (req, res) => {
-    const{email,password} = req.body;
+    const { email, password } = req.body;
+
     if (!email || !password) {
-        return res.status(422).json({ error: "Please add all the fields" })
+        return res.status(422).json({ error: "Please add all the fields" });
     }
 
-    USER.findOne({email:email}).then((savedUser) => {
+    USER.findOne({ email: email }).then((savedUser) => {
         if (!savedUser) {
-            return res.status(422).json({ error: "Invalid Email or Password" })
+            return res.status(422).json({ error: "Invalid Email or Password" });
         }
+
         console.log(savedUser);
-        
+
         bcrypt.compare(password, savedUser.password).then((match) => {
             if (match) {
-                res.json({message: "Successfully signed in"})
+                // Generate JWT token
                 const token = jwt.sign({ _id: savedUser.id }, jwt_secret);
-                const { _id, name, email, userName } = savedUser
+                console.log(token);
 
-                res.json({ token, user: { _id, name, email, userName } })
+                // Destructure user data
+                const { _id, name, email, userName } = savedUser;
 
-                console.log({ token, user: { _id, name, email, userName } })
+                // Send response only once with token and user details
+                res.json({
+                    token,
+                    user: { _id, name, email, userName }
+                });
+
+                console.log({ token, user: { _id, name, email, userName } });
+                return;
+
             } else {
-                return res.status(422).json({ error: "Invalid Email or Password" })
+                return res.status(422).json({ error: "Invalid Email or Password" });
             }
-        })
-        .catch(err => console.log(err))
-    })
+        }).catch(err => console.log(err));
+    });
 });
+
+
 
 
 
