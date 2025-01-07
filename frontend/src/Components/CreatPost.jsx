@@ -1,53 +1,83 @@
 import React, { useState ,useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 
 const CreatPost = () => {
   const[body ,setBody]=useState('');
   const[image ,setImage]=useState('');
   const [url, setUrl] = useState("");
+  const navigate = useNavigate()
+
+  // Toast functions
+    const notifyA = (msg) => toast.error(msg)
+    const notifyB = (msg) => toast.success(msg)
 
 
-  useEffect(() => {
-    // saving post to mongodb
-    if (url) {
+  // useEffect(() => {
+  //   // saving post to mongodb
+  //   if (url) {
 
-      fetch("http://localhost:5000/createPost", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("jwt")
-        },
-        body: JSON.stringify({
-          body,
-          pic: url
-        })
-      }).then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            notifyA(data.error)
-          } else {
-            notifyB("Successfully Posted")
-            navigate("/")
-          }
-        })
-        .catch(err => console.log(err))
-    }
+  //     fetch("http://localhost:5000/createpost", {
+  //       method: "post",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": "Bearer " + localStorage.getItem("jwt")
+          
+  //       },
+        
+  //       body: JSON.stringify({
+  //         body,
+  //         pic: url
+  //       })
+  //     }).then(res => res.json())
+  //       .then(data => {
+  //         if (data.error) {
+  //           console.log(data.error);
+            
+  //           notifyA(data.error)
+  //         } else {
+  //           notifyB("Successfully Posted")
+  //           navigate("/")
+  //         }
+  //       })
+        
+  //       .catch(err => console.log(err))
+  //   }
 
-  }, [url])
+  // }, [url])
 
 
     // posting image to cloudinary
-const postDetails = () => {
+
+
+    const postDetails = () => {
   console.log(body, image)
   const data = new FormData()
   data.append("file", image)
   data.append("upload_preset", "insta-clone")
   data.append("cloud_name", "clone00project")
-  fetch("https://api.cloudinary.com/v1_1/cantacloud2/image/upload", {
+  fetch("https://api.cloudinary.com/v1_1/Insta-clone/image/upload", {
     method: "post",
     body: data
   }).then(res => res.json())
     .then(data => setUrl(data.url))
     .catch(err => console.log(err))
+
+    fetch("http://localhost:5000/createpost", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+        
+      },
+      
+      body: JSON.stringify({
+        body,
+        pic: url
+      })
+    }).then(res => res.json())
+
   console.log(url)
 }
 
