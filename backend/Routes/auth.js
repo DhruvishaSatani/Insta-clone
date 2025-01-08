@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const USER = mongoose.model("USER");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const {jwt_secret} = require('../keys.js');
+const { Jwt_secret} = require('../keys.js');
 // const requireLogin = require("../middlewares/requireLogin");
 
 router.get('/', (req, res) => {
@@ -67,7 +67,7 @@ router.post('/signin', (req, res) => {
         bcrypt.compare(password, savedUser.password).then((match) => {
             if (match) {
                 // Generate JWT token
-                const token = jwt.sign({ _id: savedUser.id }, jwt_secret);
+                const token = jwt.sign({ _id: savedUser.id },  Jwt_secret);
                 console.log(token);
 
                 // Destructure user data

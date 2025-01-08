@@ -1,10 +1,10 @@
 import React, { useState,useContext } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import { toast} from 'react-toastify';
-// import { LoginContext } from "../Context/LoginContext";
+import { LoginContext } from "../Context/LoginContext";
 
 const SignIn = () => {
-  // const {setUserLogin}= useContext(LoginContext)
+  const {setUserLogin}= useContext(LoginContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -42,9 +42,9 @@ const SignIn = () => {
           notifyB("Signed In Successfully")
           
           localStorage.setItem("jwt", data.token)
-          localStorage.setItem("user", JSON.stringify(data.user))
+          // localStorage.setItem("user", JSON.stringify(data.user))
 
-          // setUserLogin(true)
+          setUserLogin(true)
           navigate("/")
         }
         console.log(data)

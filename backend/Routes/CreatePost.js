@@ -8,25 +8,15 @@ const POST = mongoose.model("POST")
 
 
 // Route
-// router.post("/createpost", requireLogin, (req, res) => {
-    
-//    const { title, body} = req.body;
-//    if (!title || !body) {
-//        return res.status(422).json({ error: "Please add all the fields" })
-//    }
-//    res.user 
+router.post("./allposts", (req,res)=>{
+    POST.find()
+    .populate("postedBy", "_id name Photo")
+    .populate("comments.postedBy", "_id name")
+    .sort("-createdAt")
+    .then(posts => res.json(posts))
+    .catch(err => console.log(err))
+})
 
-//    res.json( "Successfully posted");
-//    console.log(req.user)
-//    const post = new POST({
-//        body,
-//        photo: pic,
-//        postedBy: req.user
-//    })
-//    post.save().then((result) => {
-//        return res.json({ post: result })
-//    }).catch(err => console.log(err))
-// })
 
 router.post("/createpost", requireLogin, (req, res) => {
     const { title, body } = req.body;

@@ -63,9 +63,9 @@ const CreatPost = () => {
 
     fetch("http://localhost:5000/createpost", {
       method: "post",
-      headers: {
+      headers:{
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        "Authorization": "Bearer " + localStorage.getItem("jwt"),
       },
 
       body: JSON.stringify({
@@ -77,13 +77,6 @@ const CreatPost = () => {
     console.log(url);
   };
 
-  const loadfile = (event) => {
-    var output = document.getElementById("output");
-    output.src = URL.createObjectURL(event.target.files[0]);
-    output.onload = function () {
-      URL.revokeObjectURL(output.src); // free memory
-    };
-  };
   return (
     <div className="max-w-lg    mx-auto my-[20px] border border-gray-200 rounded-md ">
       {/* post-header */}
@@ -91,9 +84,7 @@ const CreatPost = () => {
         <h2 className="text-xl font-semibold mx-auto ">Create New Post</h2>
         <button
           id="post-btn"
-          onClick={() => {
-            postDetails();
-          }}
+          onClick={() => {postDetails()}}
           className="border-none text-[#339ce3] font-bold cursor-pointer"
         >
           {" "}
